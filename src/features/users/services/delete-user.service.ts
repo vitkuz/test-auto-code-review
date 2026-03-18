@@ -1,13 +1,14 @@
-import { getUsers } from './create-user.service';
+import { User } from '../users.types';
+import * as usersStore from './users.store';
 
 export const deleteUser = (id: string): boolean => {
-  const users = getUsers();
-  const index: number = users.findIndex((u) => u.id === id);
+  const users: readonly User[] = usersStore.getAll();
+  const exists: boolean = users.some((u: User) => u.id === id);
 
-  if (index === -1) {
+  if (!exists) {
     return false;
   }
 
-  users.splice(index, 1);
+  usersStore.removeById(id);
   return true;
 };

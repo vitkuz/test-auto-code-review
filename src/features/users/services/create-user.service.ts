@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../users.types';
 import { CreateUserPayload } from '../users.schema';
-
-const users: User[] = [];
+import * as usersStore from './users.store';
 
 export const createUser = (payload: CreateUserPayload): User => {
   const user: User = {
@@ -12,8 +11,6 @@ export const createUser = (payload: CreateUserPayload): User => {
     createdAt: new Date(),
   };
 
-  users.push(user);
+  usersStore.add(user);
   return user;
 };
-
-export const getUsers = (): User[] => users;
