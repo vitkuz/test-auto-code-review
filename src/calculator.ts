@@ -13,25 +13,20 @@ const divide = (a: number, b: number): number => {
   return a / b;
 };
 
-const calculate = (operation: Operation, a: number, b: number): number => {
-  const operations: Record<Operation, (a: number, b: number) => number> = {
-    add,
-    subtract,
-    multiply,
-    divide,
-  };
-
-  return operations[operation](a, b);
+const OPERATIONS: Record<Operation, (a: number, b: number) => number> = {
+  add,
+  subtract,
+  multiply,
+  divide,
 };
 
-const main = (): void => {
-  console.log('Addition: 2 + 3 =', calculate('add', 2, 3));
-  console.log('Subtraction: 10 - 4 =', calculate('subtract', 10, 4));
-  console.log('Multiplication: 5 * 6 =', calculate('multiply', 5, 6));
-  console.log('Division: 15 / 3 =', calculate('divide', 15, 3));
-};
+const calculate = (operation: string, a: number, b: number): number => {
+  if (!(operation in OPERATIONS)) {
+    throw new Error(`Invalid operation: "${operation}". Valid operations are: ${Object.keys(OPERATIONS).join(', ')}`);
+  }
 
-main();
+  return OPERATIONS[operation as Operation](a, b);
+};
 
 export { add, subtract, multiply, divide, calculate };
 export type { Operation };
