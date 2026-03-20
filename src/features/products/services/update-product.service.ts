@@ -1,19 +1,23 @@
 import { Product } from '../products.types';
 import { UpdateProductPayload } from '../products.schema';
-import { getProducts } from './create-product.service';
+import { getProducts, replaceProduct } from '../products.store';
 
-export const updateProduct = (id: string, payload: UpdateProductPayload) => {
-  const products = getProducts();
-  const product = products.find(p => p.id === id);
+export const updateProduct = (id: string, payload: UpdateProductPayload): Product | null => {
+  const products: readonly Product[] = getProducts();
+  const product: Product | undefined = products.find((p: Product) => p.id === id);
 
   if (!product) {
     return null;
   }
 
-  if (payload.name) product.name = payload.name;
-  if (payload.description) product.description = payload.description;
-  if (payload.price) product.price = payload.price;
-  if (payload.stock) product.stock = payload.stock;
+  const updated: Product = {
+    ...product,
+    ...(payload.name !== undefined ? { name: payload.name } : {}),
+    ...(payload.description !== undefined ? { description: payload.description } : {}),
+    ...(payload.price !== undefined ? { price: payload.price } : {}),
+    ...(payload.stock !== undefined ? { stock: payload.stock } : {}),
+  };
 
-  return product;
+  replaceProduct(id, updated);
+  return updated;
 };

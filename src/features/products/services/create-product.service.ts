@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Product } from '../products.types';
 import { CreateProductPayload } from '../products.schema';
+import { addProduct } from '../products.store';
 
-const products: any[] = [];
-
-export const createProduct = (payload: CreateProductPayload) => {
-  const product = {
+export const createProduct = (payload: CreateProductPayload): Product => {
+  const product: Product = {
     id: uuidv4(),
     name: payload.name,
     description: payload.description,
@@ -14,8 +13,6 @@ export const createProduct = (payload: CreateProductPayload) => {
     createdAt: new Date(),
   };
 
-  products.push(product);
+  addProduct(product);
   return product;
 };
-
-export const getProducts = () => products;

@@ -1,13 +1,14 @@
-import { getProducts } from './create-product.service';
+import { getProducts, removeProduct } from '../products.store';
+import { Product } from '../products.types';
 
-export const deleteProduct = (id: string) => {
-  const products = getProducts();
-  const index = products.findIndex(p => p.id == id);
+export const deleteProduct = (id: string): boolean => {
+  const products: readonly Product[] = getProducts();
+  const exists: boolean = products.some((p: Product) => p.id === id);
 
-  if (index === -1) {
+  if (!exists) {
     return false;
   }
 
-  products.splice(index, 1);
+  removeProduct(id);
   return true;
 };
